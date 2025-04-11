@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cost Estimator</title>
+</head>
+<body>
+    <h1>Cost Estimator</h1>
+    <form method="POST">
+        <table style="border-collapse: collapse; width: auto;">
+            <tr>
+                <th>CPU & Memory</th>
+                <th>Pods</th>
+                <th>Hours (Max 24)</th>
+            </tr>
+            <tr>
+                <td>
+                    <label for="pod_cpu">Pod CPU:</label>
+                    <input type="number" id="pod_cpu" name="pod_cpu" required maxlength="5" size="5" step="0.001">
+                </td>
+                <td>
+                    <label for="peak_pods">Peak Pods:</label>
+                    <input type="number" id="peak_pods" name="peak_pods" required maxlength="5" size="5">
+                </td>
+                <td>
+                    <label for="peak_hours">Peak Hours:</label>
+                    <input type="number" id="peak_hours" name="peak_hours" required maxlength="5" size="5" max="24">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="pod_mem">Pod Memory:</label>
+                    <input type="number" id="pod_mem" name="pod_mem" required maxlength="5" size="5">
+                </td>
+                <td>
+                    <label for="normal_pods">Normal Pods:</label>
+                    <input type="number" id="normal_pods" name="normal_pods" maxlength="5" size="5">
+                </td>
+                <td>
+                    <label for="normal_hours">Normal Hours:</label>
+                    <input type="number" id="normal_hours" name="normal_hours" maxlength="5" size="5" max="24">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <label for="off_hours_pods">Off Hours Pods:</label>
+                    <input type="number" id="off_hours_pods" name="off_hours_pods" maxlength="5" size="5">
+                </td>
+                <td>
+                    <label for="off_hours">Off Hours:</label>
+                    <input type="number" id="off_hours" name="off_hours" maxlength="5" size="5" max="24">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center;">
+                    <button type="submit">Submit</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+</html>

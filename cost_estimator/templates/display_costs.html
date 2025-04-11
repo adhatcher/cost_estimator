@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cost Comparison</title>
+</head>
+<body>
+    <h1>Cost Comparison</h1>
+    <table style="width: 20%; margin: 0 auto; margin-bottom: 20px; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for param, value in param_data.items() %}
+            <tr>
+                <td>{{ param }}</td>
+                <td>{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <style>
+        div[style="display: flex;"] {
+            justify-content: center;
+            width: 50%;
+            margin: 0 auto;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function convertToUSD(value) {
+                return `$${parseFloat(value).toFixed(2)}`;
+            }
+
+            const eksCosts = document.querySelectorAll("div:nth-child(1) ul li");
+            eksCosts.forEach(item => {
+                const text = item.textContent;
+                const parts = text.split(": ");
+                if (parts.length === 2 && !isNaN(parts[1])) {
+                    item.textContent = `${parts[0]}: ${convertToUSD(parts[1])}`;
+                }
+            });
+
+            const ecsCosts = document.querySelectorAll("div:nth-child(2) ul li");
+            ecsCosts.forEach(item => {
+                const text = item.textContent;
+                const parts = text.split(": ");
+                if (parts.length === 2 && !isNaN(parts[1])) {
+                    item.textContent = `${parts[0]}: ${convertToUSD(parts[1])}`;
+                }
+            });
+        });
+    </script>
+    <div style="display: flex;">
+        <div style="flex: 1; margin-right: 20px;">
+            <h2>EKS Costs</h2>
+            <ul>
+                <li>Peak Hours: {{ eks_data.peak_hours }}</li>
+                <li>Normal Hours: {{ eks_data.normal_hours }}</li>
+                <li>Off Hours: {{ eks_data.off_hours }}</li>
+                <li>Control Plane: {{ eks_data.control_plane }}</li>
+                <li>Core Node: {{ eks_data.core_nodes }}</li>
+                <li>Total: {{ eks_data.total }}</li>
+            </ul>
+        </div>
+        <div style="flex: 1;">
+            <h2>ECS Costs</h2>
+            <ul>
+                <li>Peak Hours: {{ ecs_data.peak_hours }}</li>
+                <li>Normal Hours: {{ ecs_data.normal_hours }}</li>
+                <li>Off Hours: {{ ecs_data.off_hours }}</li>
+                <li><strong>Total: {{ ecs_data.total }}</strong></li>
+            </ul>
+        </div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/cost_estimator" style="text-decoration: none; color: blue; font-size: 16px;">Go to Cost Estimator Form</a>
+    </div>
+</body>
+</html>
