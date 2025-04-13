@@ -1,10 +1,11 @@
-.PHONY: install build test coverage run package
+.PHONY: install build test coverage run package clean
 
 install:
 	poetry install
 
+# Define the build target to create a Python wheel
 build:
-	poetry build
+	python setup.py bdist_wheel
 
 test:
 	PYTHONPATH=./ poetry run pytest
@@ -18,3 +19,7 @@ run:
 # Target to package the application as a .whl file
 package:
 	poetry build -f wheel
+
+# Clean up build artifacts
+clean:
+	rm -rf build dist *.egg-info

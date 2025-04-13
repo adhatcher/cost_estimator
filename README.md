@@ -1,6 +1,6 @@
 # Cost Estimator
 
-A Python application for cost estimation.
+A Python application for cost comparison between EKS and ECS.  The application will accept input for pod cpu and memory, as well as the number of pods to run during normal, peak and off hours.
 
 ## Prerequisites
 

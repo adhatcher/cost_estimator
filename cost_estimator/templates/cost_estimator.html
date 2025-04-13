@@ -7,52 +7,52 @@
     <h1>Cost Estimator</h1>
     <form method="POST">
         <table style="border-collapse: collapse; width: auto;">
-            <tr>
-                <th>CPU & Memory</th>
-                <th>Pods</th>
-                <th>Hours (Max 24)</th>
+            <tr style="background-color: #f2f2f2; text-align: left;">
+                <th style="padding: 10px; border: 1px solid #ddd;">CPU & Memory</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Pods</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Hours (Max 24)</th>
             </tr>
             <tr>
-                <td>
-                    <label for="pod_cpu">Pod CPU:</label>
+                <td style="padding: 10px;">
+                    <label for="pod_cpu">Pod CPU:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="number" id="pod_cpu" name="pod_cpu" required maxlength="5" size="5" step="0.001">
                 </td>
-                <td>
-                    <label for="peak_pods">Peak Pods:</label>
+                <td style="padding: 10px;">
+                    <label for="peak_pods">Peak Pods:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="number" id="peak_pods" name="peak_pods" required maxlength="5" size="5">
                 </td>
-                <td>
-                    <label for="peak_hours">Peak Hours:</label>
+                <td style="padding: 10px;">
+                    <label for="peak_hours">Peak Hours:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="number" id="peak_hours" name="peak_hours" required maxlength="5" size="5" max="24">
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="padding: 10px">
                     <label for="pod_mem">Pod Memory:</label>
                     <input type="number" id="pod_mem" name="pod_mem" required maxlength="5" size="5">
                 </td>
-                <td>
-                    <label for="normal_pods">Normal Pods:</label>
+                <td style="padding: 10px;">
+                    <label for="normal_pods">Normal Pods:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="number" id="normal_pods" name="normal_pods" maxlength="5" size="5">
                 </td>
-                <td>
-                    <label for="normal_hours">Normal Hours:</label>
+                <td style="padding: 10px">
+                    <label for="normal_hours">Normal Hours:&nbsp;</label>
                     <input type="number" id="normal_hours" name="normal_hours" maxlength="5" size="5" max="24">
                 </td>
             </tr>
             <tr>
                 <td></td>
-                <td>
+                <td style="padding: 10px">
                     <label for="off_hours_pods">Off Hours Pods:</label>
                     <input type="number" id="off_hours_pods" name="off_hours_pods" maxlength="5" size="5">
                 </td>
-                <td>
-                    <label for="off_hours">Off Hours:</label>
+                <td style="padding: 10px;"">
+                    <label for="off_hours">Off Hours:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     <input type="number" id="off_hours" name="off_hours" maxlength="5" size="5" max="24">
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align: center;">
+                <td style="padding: 10px;" colspan="3" style="text-align: center;">
                     <button type="submit">Submit</button>
                 </td>
             </tr>

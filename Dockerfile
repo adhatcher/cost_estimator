@@ -1,16 +1,29 @@
-FROM python:3.10-slim
+# Use an official Python runtime as a parent image
+FROM python:3.12-slim
 
+# Set the working directory in the container
 WORKDIR /app
 
 # Install Poetry
-RUN pip install poetry
+RUN pip install --no-cache-dir poetry
 
-# Copy Poetry files and install dependencies
+# Copy only the necessary files for dependency installation
 COPY pyproject.toml poetry.lock /app/
-RUN poetry config virtualenvs.create false && poetry install --no-dev
 
-# Copy application code
-COPY . /app
+# Install dependencies using Poetry
+RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 
-# Set the default command to run the Flask app
-CMD ["poetry", "run", "flask", "run", "--host=0.0.0.0", "--port=5000"]
+# Copy the wheel file into the container
+COPY dist/*.whl /app/
+
+# Install the wheel
+RUN pip install --no-cache-dir /app/*.whl
+
+# Copy the rest of the application code into the container
+COPY . /app/
+
+# Expose the port the app runs on (if applicable)
+EXPOSE 5000
+
+# Define the command to run the application
+CMD ["python", "app.py"]
