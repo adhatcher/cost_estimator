@@ -18,6 +18,7 @@ if os.getenv("ENABLE_LOGGING", "true").lower() == "false":# Disable all logging 
     logging.disable(logging.CRITICAL)
     logging.disable(logging.INFO)
 
+print(f"Enable_Logging:{os.getenv('ENABLE_LOGGING')}\t Log_Level:{log_level}")
 app = Flask(__name__)
 
 class ECS_PRICING:
@@ -166,26 +167,59 @@ def cost_estimator():
     if request.method == 'POST':
         # Validate and collect parameters
         try:
-            pod_cpu = Decimal(request.form['pod_cpu'])
-            pod_mem = int(request.form['pod_mem'])
-            peak_pods = int(request.form['peak_pods'])
-            peak_hours = int(request.form['peak_hours'])
-            normal_pods = int(request.form.get('normal_pods', 0))
-            normal_hours = int(request.form.get('normal_hours', 0))
-            off_hours_pods = int(request.form.get('off_hours_pods', 0))
-            off_hours = int(request.form.get('off_hours', 0))
-        except (ValueError, KeyError):
+            try:
+                pod_cpu = Decimal(request.form['pod_cpu'])
+            except ValueError:
+                pod_cpu = Decimal(0)
+            try:   
+                pod_mem = Decimal(request.form['pod_mem'])
+            except ValueError:     
+                pod_mem = Decimal(0)
+            try:
+                peak_pods = int(request.form['peak_pods'])
+            except ValueError:
+                peak_pods = 0
+            try:
+                peak_hours = int(request.form['peak_hours'])
+            except (ValueError, TypeError):
+                peak_hours = 0
+            try:
+                normal_pods = int(request.form.get('normal_pods', 0))
+            except ValueError:
+                normal_pods = 0
+            try:    
+                normal_hours = int(request.form.get('normal_hours', 0))
+            except ValueError:
+                normal_hours = 0
+            try:
+                off_hours_pods = int(request.form.get('off_hours_pods', 0))
+            except ValueError:
+                off_hours_pods = 0  # Fallback to a default value
+            try:
+                off_hours = int(request.form.get('off_hours', 0))
+            except ValueError:
+                off_hours = 0
+        except (ValueError, KeyError) as e:
+            logger.error(f"Error in input validation: {e}")
             return "Invalid input", 400
 
         # Redirect to display_costs API
-        return display_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours)
+        try:
+            return display_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours)
+        except Exception as e:
+            logger.error(f"Error while calculating costs: {e}")
+            return "An error occurred while processing your request. Please try again later.", 500
     return render_template('cost_estimator.html')
 
 @app.route('/display_costs', methods=['POST'])
 def display_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours):
     # Call calculate_eks_costs and calculate_ecs_costs
-    eks_data = calculate_eks_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours)
-    ecs_data = calculate_ecs_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours)
+    try:
+        eks_data = calculate_eks_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours)
+        ecs_data = calculate_ecs_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours)
+    except Exception as e:
+        logger.error(f"Error while calculating costs in display_costs: {e}")
+        return "An error occurred while calculating costs. Please check the input and try again.", 500
     param_data = ({
         "pod_cpu": pod_cpu,
         "pod_mem": pod_mem,
@@ -202,15 +236,15 @@ def display_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_h
 
 
 def calculate_ecs_costs(pod_cpu, pod_mem, peak_pods, peak_hours, normal_pods, normal_hours, off_hours_pods, off_hours):
-    ecs_pricing = ECS_PRICING()
-    creds = ecs_pricing.get_aws_session_token() 
-    cpu = ecs_pricing.fetch_ecs_cpu_pricing(creds)
-    mem = ecs_pricing.fetch_ecs_mem_pricing(creds)   
+    # ecs_pricing = ECS_PRICING()
+    # creds = ecs_pricing.get_aws_session_token() 
+    # cpu = ecs_pricing.fetch_ecs_cpu_pricing(creds)
+    # mem = ecs_pricing.fetch_ecs_mem_pricing(creds)   
     
-    # ecs_vcpu_pricing = 0.03238
-    # ecs_mem_pricing = 0.00356
-    # cpu = ecs_vcpu_pricing
-    # mem = ecs_mem_pricing
+    ecs_vcpu_pricing = 0.03238
+    ecs_mem_pricing = 0.00356
+    cpu = Decimal(ecs_vcpu_pricing)
+    mem = Decimal(ecs_mem_pricing)
 
 
     peak_charges = (cpu * pod_cpu + mem * pod_mem) * peak_pods * peak_hours * 30

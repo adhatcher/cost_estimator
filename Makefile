@@ -14,7 +14,7 @@ coverage:
 	poetry run pytest --cov=cost_estimator
 
 run:
-	PYTHONPATH=cost_estimator FLASK_APP=cost_estimator.app poetry run flask run --host=0.0.0.0 --port=8000
+	ENABLE_LOGGING=true LOGLEVEL=DEBUG PYTHONPATH=cost_estimator FLASK_APP=cost_estimator.app poetry run flask run --host=0.0.0.0 --port=8000
 
 # Target to package the application as a .whl file
 package:
