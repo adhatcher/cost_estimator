@@ -1,3 +1,11 @@
+# Variables
+APP_NAME = cost_estimator
+ENTRY_POINT = cost_estimate/app.py
+HOST = 0.0.0.0
+PORT = 8000
+FLASK_APP = $(APP_NAME).app
+
+
 .PHONY: install build test coverage run package clean
 
 install:
@@ -5,16 +13,11 @@ install:
 
 # Define the build target to create a Python wheel
 build:
-	python setup.py bdist_wheel
+	poetry build -f wheel
 
-test:
-	PYTHONPATH=./ poetry run pytest
-
-coverage:
-	poetry run pytest --cov=cost_estimator
 
 run:
-	ENABLE_LOGGING=true LOGLEVEL=DEBUG PYTHONPATH=cost_estimator FLASK_APP=cost_estimator.app poetry run flask run --host=0.0.0.0 --port=8000
+	PYTHONPATH=${APP_NAME} FLASK_APP=${FLASK_APP} poetry run flask run --host=${HOST} --port=${PORT}
 
 # Target to package the application as a .whl file
 package:
